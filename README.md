@@ -120,6 +120,7 @@ Open the application at:
 http://localhost:5173
 
 
+
 🌱 Future Enhancements
 
 Add more tools (air quality, humidity, forecast)

@@ -1,23 +1,28 @@
 import os
+import re
 from langchain_openai import ChatOpenAI
 from weather_tool import get_weather
 
 def run_agent(user_query: str):
-
-    llm = ChatOpenAI(
-        model="gpt-3.5-turbo",
-        openai_api_key=os.getenv("OPENROUTER_API_KEY"),
-        base_url="https://openrouter.ai/api/v1"
-    )
-
-    city = user_query.split()[-1]
+    city = re.sub(r"[^a-zA-Z ]", "", user_query).split()[-1]
     weather = get_weather(city)
 
-    prompt = f"""
-    User question: {user_query}
-    Weather info: {weather}
-    Respond clearly.
-    """
+    # 🔒 SAFETY CHECK
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        return "OpenRouter API key not found"
 
-    response = llm.invoke(prompt)
-    return response.content
+    llm = ChatOpenAI(
+        model="openai/gpt-3.5-turbo",  
+        openai_api_key=api_key,
+        base_url="https://openrouter.ai/api/v1",
+        timeout=20,                   
+    )
+
+    try:
+        response = llm.invoke(
+            f"User asked: {user_query}. Weather info: {weather}. Respond simply."
+        )
+        return response.content
+    except Exception as e:
+        return f"LLM error: {str(e)}"
