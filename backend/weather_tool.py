@@ -16,11 +16,11 @@ def get_weather(city: str) -> str:
         response = requests.get(url, timeout=5)
         data = response.json()
 
-        # 🚨 City not found
+        # City not found
         if data.get("cod") == "404":
             return f"Sorry, I couldn't find weather information for '{city}'."
 
-        # 🚨 API error
+        # API error
         if response.status_code != 200:
             return "Weather service is temporarily unavailable. Please try again later."
 
