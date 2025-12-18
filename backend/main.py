@@ -8,10 +8,10 @@ from agent import run_agent
 
 app = FastAPI()
 
-# ✅ ADD THIS (VERY IMPORTANT)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # frontend URL
+    allow_origins=["http://localhost:5173"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,6 +26,6 @@ def health():
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    print("➡️ /chat HIT:", request.query)  # now you WILL see this
+    print("➡️ /chat HIT:", request.query) 
     answer = run_agent(request.query)
     return {"response": answer}

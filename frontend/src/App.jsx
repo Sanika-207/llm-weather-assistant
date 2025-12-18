@@ -18,7 +18,7 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: message }), // ✅ FIXED
+        body: JSON.stringify({ query: message }), 
       });
 
       const data = await res.json();
